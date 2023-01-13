@@ -1,0 +1,61 @@
+<template>
+  <q-card>
+    <q-toolbar class="bg-primary text-white">
+      <q-toolbar-title>
+        <!-- TODO: Place your form title here -->
+      </q-toolbar-title>
+
+    </q-toolbar>
+    {{! Render fields as rows }}
+    {{#rows}}
+      <q-card-section>
+        <div class="row q-col-gutter-sm">
+          {{#fields}}
+            <div class="col-{{ cols }}">
+            {{#component}}
+              {{#isInput}}
+                <q-input name="{{ id }}" type="{{ inputType }}" v-model="{{ id }}" label="{{ label }}" outlined />
+              {{/isInput}}
+              {{#isToggle}}
+                <q-toggle name="{{ id }}" v-model="{{ id }}" label="{{ label }}" />
+              {{/isToggle}}
+            {{/component}}
+            </div>
+          {{/fields}}
+        </div>
+      </q-card-section>
+
+    {{/rows}}
+  </q-card>
+</template>
+<script setup lang="ts">
+import { ref, computed, PropType } from 'vue'
+
+type ViewModel = {
+  {{#rows}}
+    {{#fields}}
+      {{ id }}?: {{ type }},
+    {{/fields}}
+  {{/rows}}
+}
+
+const props = defineProps( {
+  modelValue: { type: Object as PropType<ViewModel> },
+})
+
+const emit = defineEmits(['update:modelValue'])
+
+{{! Render fields as computed values }}
+{{#rows}}
+{{#fields}}
+const {{ id }} = computed({
+  get: ()=>props.modelValue?.{{ id }}||{{#defaultValue}}{{/defaultValue}},
+  set: (value)=> {
+    if (!props.modelValue) return;
+    props.modelValue.{{ id }} = value;
+    emit('update:modelValue',props.modelValue);
+  }
+});
+{{/fields}}
+{{/rows}}
+</script>

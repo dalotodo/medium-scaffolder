@@ -1,0 +1,40 @@
+{
+  "name": "quasar-modular-sample",
+  "version": "0.0.1",
+  "description": "Quasar Modular Application Sample Project",
+  "productName": "Quasar Modular App",
+  "author": "Pablo Pérez <dalotodo69@gmail.com>",
+  "private": true,
+  "scripts": {
+    "dev": "quasar dev",
+    "build": "quasar build"
+  },
+  "dependencies": {
+    "@highlightjs/vue-plugin": "^2.1.0",
+    "@quasar/extras": "^1.0.0",
+    "highlight.js": "^11.7.0",
+    "highlightjs-vue": "^1.0.0",
+    "mustache": "^4.2.0",
+    "pinia": "^2.0.11",
+    "quasar": "^2.6.0",
+    "simple-code-editor": "^1.2.2",
+    "vue": "^3.0.0",
+    "vue-i18n": "^9.2.2",
+    "vue-router": "^4.0.0",
+    "vue3-highlightjs": "^1.0.5"
+  },
+  "devDependencies": {
+    "@intlify/vite-plugin-vue-i18n": "^3.3.1",
+    "@quasar/app-vite": "^1.0.0",
+    "@types/highlight.js": "^10.1.0",
+    "@types/mustache": "^4.2.2",
+    "@types/node": "^12.20.21",
+    "autoprefixer": "^10.4.2",
+    "typescript": "^4.5.4"
+  },
+  "engines": {
+    "node": "^18 || ^16 || ^14.19",
+    "npm": ">= 6.13.4",
+    "yarn": ">= 1.21.1"
+  }
+}
