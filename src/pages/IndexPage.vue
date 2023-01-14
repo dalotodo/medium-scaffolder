@@ -3,28 +3,39 @@
     <q-splitter v-model="split" style="height: 100vh;">
       <template #before>
         <div class="q-pa-sm">
-          <CodeEditor v-model="sourceCode" class="full-width" :language-selector="true" :languages="languages"></CodeEditor>
+          <CodeEditor v-model="sourceCode" class="full-width" :config="config" ></CodeEditor>
         </div>
       </template>
-      <template #separator>
-        <q-btn color="primary" text-color="white" size="20px" round icon="chevron_right" @click="doRender()" />
-      </template>
+
       <template #after>
         <div class="q-pa-sm">
-          <CodeEditor v-model="targetCode" class="full-width" :readonly="true"></CodeEditor>
+          <CodeEditor v-model="targetCode" class="full-width" :config="config" :readonly="true"></CodeEditor>
         </div>
-        <!-- <CodeDisplay v-model="sourceCode" /> -->
+      </template>
+
+      <template #separator>
+        <q-btn color="primary" text-color="white" size="20px" round icon="chevron_right"  @click="doRender()" />
       </template>
     </q-splitter>
   </q-page>
 </template>
 
 <script setup lang="ts">
-import { computed, ref } from 'vue'
-import CodeEditor from 'simple-code-editor';
+import { computed, reactive, ref } from 'vue'
+import CodeEditor from 'src/components/codemirror-editor.vue';
 import { useTemplateRenderingEngine } from 'src/lib/render';
 import { useQuasar } from 'quasar';
 
+
+const config = reactive({
+        disabled: false,
+        indentWithTab: true,
+        tabSize: 2,
+        autofocus: true,
+        height: 'auto',
+        language: 'javascript',
+        theme: 'oneDark'
+      })
 
 const $q = useQuasar();
 
@@ -55,11 +66,11 @@ const languages = ref([
 async function doRender() {
   try {
     const data = JSON.parse(sourceCode.value);
-    const code = engine.render(template.value, data);
+    const code = await engine.render(template.value, data);
     targetCode.value = code;
   } catch (err) {
     $q.notify({
-      type: 'info',
+      type: 'negative',
       message: `${err}`
     })
   }
