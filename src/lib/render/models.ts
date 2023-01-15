@@ -1,7 +1,7 @@
 
 export type RenderTemplateProcessingFunction<T=any> = (src: T) => string;
 
-// export type RenderTemplate = {
-//   id: string;
-//   render: RenderTemplateProcessingFunction;
-// }
+export type RenderTemplate<T=any> = {
+   render: RenderTemplateProcessingFunction<T>;
+   sample: string;
+}

@@ -1,0 +1,30 @@
+{
+  "fields": [
+      [
+          {
+              "id": "name",
+              "label": "Name",
+              "type": "string"
+          }
+      ],
+      [
+          {
+              "id": "firstName",
+              "label": "First name",
+              "type": "string"
+          },
+          {
+              "id": "lastName",
+              "label": "Last name",
+              "type": "string"
+          }
+      ],
+      [
+          {
+              "id": "isMarried",
+              "label": "Is married?",
+              "type": "boolean"
+          }
+      ]
+  ]
+}

@@ -1,5 +1,16 @@
 <template>
   <q-page class="q-pa-md">
+    <q-toolbar class="bg-primary text-white">
+      <q-btn-dropdown stretch flat :label="dropdownLabel">
+        <q-list>
+          <template v-for="item in templates.items">
+              <q-item clickable v-close-popup tabindex="0" @click="doSelectTemplate(item)">
+                {{ t(item) }}
+              </q-item>
+          </template>
+        </q-list>
+      </q-btn-dropdown>
+    </q-toolbar>
     <q-splitter v-model="split" style="height: 100vh;">
       <template #before>
         <div class="q-pa-sm">
@@ -14,17 +25,25 @@
       </template>
 
       <template #separator>
-        <q-btn color="primary" text-color="white" size="20px" round icon="chevron_right"  @click="doRender()" />
+        <q-btn color="primary" text-color="white" size="20px" round icon="chevron_right" :disable="!isTemplateSelected"  @click="doRender()" />
       </template>
     </q-splitter>
   </q-page>
 </template>
-
+<i18n>
+  'en-US':
+    'combo': 'Choose your template'
+    'form': 'Form'
+</i18n>
 <script setup lang="ts">
 import { computed, reactive, ref } from 'vue'
 import CodeEditor from 'src/components/codemirror-editor.vue';
-import { useTemplateRenderingEngine } from 'src/lib/render';
+import { useTemplates } from 'src/lib/render';
 import { useQuasar } from 'quasar';
+import { RenderTemplate } from 'src/lib/render/models';
+import { useI18n } from 'vue-i18n';
+
+const { t } = useI18n()
 
 
 const config = reactive({
@@ -35,38 +54,36 @@ const config = reactive({
         height: 'auto',
         language: 'javascript',
         theme: 'oneDark'
-      })
+})
 
 const $q = useQuasar();
 
 const split = ref(40);
 
-const sample = {
-  fields: [
-      // Each row
-      [ { id: 'name', label: 'Name', type: 'string' } ],
-      [ { id: 'firstName', label: 'First name', type: 'string' }, { id: 'lastName', label: 'Last name', type: 'string' }, ],
-      [ { id: 'isMarried', label: 'Is married?', type: 'boolean' } ],
-  ]
-}
 
-const sourceCode = ref(JSON.stringify(sample, null, 4))
+const sourceCode = ref('')
 const targetCode = ref('')
 
-const engine = useTemplateRenderingEngine();
+const templates = useTemplates();
 
-const template = ref('form')
+const selected = ref<string>()
+const dropdownLabel = computed( ()=>t(selected.value||'combo') )
 
+const template = ref<RenderTemplate>();
+const isTemplateSelected = computed( ()=>!!template.value)
 
-const languages = ref([
-  ["json", "JSON"],
-  ["typescript", "TS"],
-])
+async function  doSelectTemplate(name: string) {
+  const t = await templates.getTemplateAsync(name)
+  selected.value = name;
+  template.value = t;
+  sourceCode.value = t.sample;
+}
 
 async function doRender() {
   try {
     const data = JSON.parse(sourceCode.value);
-    const code = await engine.render(template.value, data);
+
+    const code = ( await template.value?.render(data) )|| '';
     targetCode.value = code;
   } catch (err) {
     $q.notify({

@@ -1,10 +1,7 @@
 import Module from "module";
-import { RenderTemplateProcessingFunction } from "../models";
+import { RenderTemplate } from "../models";
 
-// const importers = import.meta.glob<RenderTemplateProcessingFunction>(
-//   "./*/index.ts"
-// );
-type ModuleWithRender = Module & { default: RenderTemplateProcessingFunction; }
+type ModuleWithRender = Module & { default: RenderTemplate; }
 
 const importers = import.meta.glob<ModuleWithRender>("./*/index.ts");
 
@@ -24,17 +21,15 @@ class Lazy<T> {
 }
 
 export function createTemplatesRepository() {
-  const repository: Record<string, Lazy<RenderTemplateProcessingFunction>> = {};
+  const repository: Record<string, Lazy<RenderTemplate>> = {};
   const keys = Object.keys(importers);
   for (const fileName of keys) {
 
     const key = fileName.replace('./','').replace('/index.ts', '');
-    const template = new Lazy<RenderTemplateProcessingFunction>( async()=> {
+    const template = new Lazy<RenderTemplate>( async()=> {
       const m = await importers[fileName]()
-      console.log('Module', m)
       return m.default
     });
-    console.log(fileName,key,importers[fileName])
     repository[key] = template;
   }
   return repository;
