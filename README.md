@@ -2,7 +2,7 @@
 
 Quasar Modular Application Sample Project.
 
-This is sample project from my blog post [My personal Quasar Project scaffolding choices](https://medium.com/@dalotodo/my-personal-quasar-project-scaffolding-choices-2847afd80b3c) at [Medium.com](https://medium.com/)
+This is sample project from my blog post [Create a simple code scaffolder in Vue 3]() at [Medium.com](https://medium.com/)
 
 ## Install the dependencies
 ```bash
