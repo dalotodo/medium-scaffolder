@@ -22,7 +22,7 @@ export const useTemplates = defineStore('templates', ()=> {
 
   return {
     items,
-    getTemplateAsync: loadTemplateAsync
+    loadTemplateAsync
   }
 
 })

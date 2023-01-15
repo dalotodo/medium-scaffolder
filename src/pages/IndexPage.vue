@@ -73,7 +73,7 @@ const template = ref<RenderTemplate>();
 const isTemplateSelected = computed( ()=>!!template.value)
 
 async function  doSelectTemplate(name: string) {
-  const t = await templates.getTemplateAsync(name)
+  const t = await templates.loadTemplateAsync(name)
   selected.value = name;
   template.value = t;
   sourceCode.value = t.sample;
