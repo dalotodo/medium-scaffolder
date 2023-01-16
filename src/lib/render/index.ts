@@ -1,7 +1,7 @@
 import { defineStore } from "pinia";
 import { computed } from "vue";
 import { RenderTemplate } from "./models";
-import { createTemplatesRepository } from "./templates";
+import { getListOfAvailableTemplates } from "./templates";
 
 export interface ITemplateRenderingEngine {
   load(name: string): Promise<RenderTemplate>;
@@ -9,8 +9,10 @@ export interface ITemplateRenderingEngine {
 }
 
 export const useTemplates = defineStore('templates', ()=> {
-  const templates = createTemplatesRepository();
+  // Get list of available templates
+  const templates = getListOfAvailableTemplates();
 
+  // Load template only when needed
   const loadTemplateAsync = async (name: string)=>  {
     const t = templates[name];
     if (!t) throw new Error(`Could not find template '${name}'`);
@@ -18,6 +20,7 @@ export const useTemplates = defineStore('templates', ()=> {
     return template;
   }
 
+  // Return this list of available template keys
   const items = computed( ()=>Object.keys(templates))
 
   return {

@@ -20,7 +20,7 @@ class Lazy<T> {
   };
 }
 
-export function createTemplatesRepository() {
+export function getListOfAvailableTemplates() {
   const repository: Record<string, Lazy<RenderTemplate>> = {};
   const keys = Object.keys(importers);
   for (const fileName of keys) {
